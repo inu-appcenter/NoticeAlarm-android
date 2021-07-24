@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "549205843285",
+    "project_id": "noticealarm-2271d",
+    "storage_bucket": "noticealarm-2271d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549205843285:android:63af475b4b072ca73ce3dc",
+        "android_client_info": {
+          "package_name": "org.jik.notification_proto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549205843285-7umgbiucnmbv1h014ns3mfnl5qhjm6us.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.jik.notification_proto",
+            "certificate_hash": "1bafc3a80a60029fd0fe0a196d3f58e8d8d4d76a"
+          }
+        },
+        {
+          "client_id": "549205843285-lrkmtujqt3ale4m94la7duu1a4g2kj8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS5ajM4aAKWkH6BIvnwPKWbPNAYHLp3O8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549205843285-lrkmtujqt3ale4m94la7duu1a4g2kj8u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "549205843285-k3dqkdqour0bh2413m9vagf4fh2rij1g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appcenter.NoticeAlarm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
