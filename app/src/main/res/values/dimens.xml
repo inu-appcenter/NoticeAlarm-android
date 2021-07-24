@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bodyTextSize">14sp</dimen>
+    <dimen name="explainTextSize">10sp</dimen>
+
+    <dimen name="toolBarTextSize">18sp</dimen>
+    <dimen name="appBarMargin">54dp</dimen>
+</resources>
