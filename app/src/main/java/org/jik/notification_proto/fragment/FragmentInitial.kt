@@ -6,16 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
-import androidx.fragment.app.FragmentTransaction
-import org.jik.notification_proto.MainActivity
 import org.jik.notification_proto.R
 
 
-class Fragment_Initial : Fragment() {
+class FragmentInitial : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment__initial, container, false)
 
-        val selection = Fragment_Selection()
+        val selection = FragmentSelection()
         view.findViewById<AppCompatButton>(R.id.initial_btn).setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.main_content,selection).addToBackStack(null).commit()
             //(activity as MainActivity).supportFragmentManager.beginTransaction()
