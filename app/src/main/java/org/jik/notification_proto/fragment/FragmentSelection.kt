@@ -33,6 +33,10 @@ class FragmentSelection : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(activity)
         recyclerview.adapter = RecyclerAdapter(collegelist)
 
+        val keyword = FragmentKeyword()
+        view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.main_content,keyword).addToBackStack(null).commit()
+        }
 
         return view
     }
