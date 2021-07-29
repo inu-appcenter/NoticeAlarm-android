@@ -13,23 +13,37 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class FireBaseMessagingService : FirebaseMessagingService() {
-    private val TAG = "FirebaseTest"
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (remoteMessage.notification != null)
-        {
-            sendNotification(remoteMessage.notification?.title, remoteMessage.notification!!.body!!)
-        }
+//        val currentTitle = remoteMessage!!.data["title"]
+//        val prefNotice = this.getSharedPreferences("lastTitle", Context.MODE_PRIVATE)
+//        val lastTitle = prefNotice.getString("lastTitle", "null")
+
+        sendNotification(remoteMessage)
+
+//        if(currentTitle != lastTitle) {
+//            Log.d("이상한오작동",remoteMessage.data["title"].toString())
+//
+//            if (remoteMessage.data.isNotEmpty()) {
+//                sendNotification(remoteMessage)
+//                Log.d("작동",remoteMessage.data["title"].toString())
+//            }
+//            Log.d("오작동",remoteMessage.data["title"].toString())
+//            val editor = prefNotice.edit()
+//            editor.putString("lastTitle", remoteMessage.data["title"]).apply()
+//            editor.commit()
+//        }
     }
 
     // 새로운 토큰이 생성 될 때 호출
-    override fun onNewToken(token: String)
-    {
-        Log.d(TAG, "Refreshed token : $token")
-        super.onNewToken(token)
-    }
+//    override fun onNewToken(token: String)
+//    {
+//        Log.d(TAG, "Refreshed token : $token")
+//        super.onNewToken(token)
+//    }
 
-    private fun sendNotification(title: String?, body: String)
+    private fun sendNotification(remoteMessage: RemoteMessage)
     {
+        val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -38,8 +52,9 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         val channelId = "my_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(title)
-            .setContentText(body)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(remoteMessage.data["title"])
+            .setContentText(remoteMessage.data["body"])
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
@@ -49,12 +64,12 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         // 오레오 버전 예외처리
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId,
-                "Channel human readable title",
+                "Notice",
                 NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        notificationManager.notify(uniId/* ID of notification */, notificationBuilder.build())
     }
 
 }
