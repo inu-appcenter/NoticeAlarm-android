@@ -1,8 +1,6 @@
 package org.jik.notification_proto.adapter
 
 import android.content.res.AssetManager
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +8,17 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
 import org.jik.notification_proto.data.College
-import org.jik.notification_proto.fragment.FragmentSelection
 import org.json.JSONObject
-import kotlin.collections.listOf as listOf1
 
-class RecyclerAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<RecyclerAdapter.Holder>() {
+class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<SelectionAdapter.Holder>() {
     var cnt = 0
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectionAdapter.Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_college, parent,false)
         return Holder(view)
 
     }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.Holder, position: Int) {
+    override fun onBindViewHolder(holder: SelectionAdapter.Holder, position: Int) {
         holder.bind(colleges[position])
         // 단대 버튼이 클릭되면 json파일을 가져와 위치가 동일한 (같은) 단대의 학과들을 colleges에 추가시킴으로 view 업데이트
         holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setOnClickListener {

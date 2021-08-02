@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:text="Keyword"
         android:textColor="@color/mainBlue"
-        android:textSize="60sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,71 +65,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:text="✔ 등록한 키워드"
         android:textColor="@color/orange"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_keyword" />
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/keyword_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/enroll_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enroll_txt">
+        app:layout_constraintTop_toBottomOf="@+id/enroll_txt" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="12dp"
-            android:gravity="center"
-            android:background="@drawable/keyword_txt"
-            android:visibility="invisible"
-            android:textSize="16sp"
-            android:text="TextView" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="7dp"
-            android:gravity="center"
-            android:background="@drawable/keyword_txt"
-            android:visibility="invisible"
-            android:textSize="16sp"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="7dp"
-            android:gravity="center"
-            android:background="@drawable/keyword_txt"
-            android:visibility="invisible"
-            android:textSize="16sp"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="7dp"
-            android:gravity="center"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/keyword_txt"
-            android:visibility="invisible"
-            android:textSize="16sp"
-            android:text="TextView" />
-    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
