@@ -145,5 +145,10 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
 
     override fun onDeleteListener(keyword: KeywordEntity) {
         deleteKeyword(keyword)
+
+    }
+
+    override fun onSubscribeListener(enteredKeyword: String) {
+        unSubscribe(enteredKeyword)
     }
 }
