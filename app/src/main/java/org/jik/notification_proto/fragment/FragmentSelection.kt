@@ -2,7 +2,6 @@ package org.jik.notification_proto.fragment
 
 import android.content.res.AssetManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
-import org.jik.notification_proto.adapter.RecyclerAdapter
+import org.jik.notification_proto.adapter.SelectionAdapter
 import org.jik.notification_proto.data.College
 import org.json.JSONObject
 
@@ -39,7 +38,7 @@ class FragmentSelection : Fragment() {
 
         recyclerview = view.findViewById(R.id.selection_recyclerView) as RecyclerView
         recyclerview.layoutManager = LinearLayoutManager(activity)
-        recyclerview.adapter = RecyclerAdapter(collegelist)
+        recyclerview.adapter = SelectionAdapter(collegelist)
 
         val keyword = FragmentKeyword()
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
