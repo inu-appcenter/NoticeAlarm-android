@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.kimcore.inko.Inko
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +32,9 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
     // db
     lateinit var db : KeywordDatabase
     var keywordList = listOf<KeywordEntity>()
+
+    // 한 영 변환
+    private val inko = Inko()
 
     private lateinit var map: Map<String, String>
     private val databaseReference = FirebaseDatabase.getInstance().reference
@@ -118,7 +122,9 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
     }
 
     fun subscribe(enteredKeyword: String) {
-        Firebase.messaging.subscribeToTopic(enteredKeyword)  // enteredKeyword 라는 주제로 구독한다는걸 표시하는 메소드
+        var englishKeyword = inko.ko2en(enteredKeyword)
+        Log.d("번역된 키워드",englishKeyword)
+        Firebase.messaging.subscribeToTopic(englishKeyword)  // enteredKeyword 라는 주제로 구독한다는걸 표시하는 메소드
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("OK",enteredKeyword)
@@ -133,11 +139,16 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
     }
     // 키워드를 삭제하는 버튼을 누르면 실행되어야하는 함수
     fun unSubscribe(enteredKeyword: String){
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(enteredKeyword) // enteredKeyword 라는 주제로 구독한는걸 구독 취소하는 메소드
+        var englishKeyword = inko.ko2en(enteredKeyword)
+
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(englishKeyword) // enteredKeyword 라는 주제로 구독한는걸 구독 취소하는 메소드
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     var num = map.getValue(enteredKeyword).toInt() - 1 // 구독자 수 -1
                     databaseReference.child("keywords").child(enteredKeyword).setValue(num.toString())
+                    if(num == 0){
+                        databaseReference.child("keywords").child(enteredKeyword).removeValue()
+                    }
                 } else Log.d("network", "네트워크 상태가 불안정 합니다.")
             }
 

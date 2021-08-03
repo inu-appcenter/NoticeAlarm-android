@@ -1,6 +1,8 @@
 package org.jik.notification_proto.adapter
 
 import android.content.res.AssetManager
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +42,11 @@ class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<S
                     }
                 }
                 notifyDataSetChanged()
+            }
+            if(cnt >= 2){
+                holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundColor(
+                    Color.parseColor("#484848"))
+                Log.d("sdf",cnt.toString())
             }
         }
     }
