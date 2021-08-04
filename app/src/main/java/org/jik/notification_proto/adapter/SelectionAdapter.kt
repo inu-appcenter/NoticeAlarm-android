@@ -1,7 +1,7 @@
 package org.jik.notification_proto.adapter
 
 import android.content.res.AssetManager
-import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +10,13 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
 import org.jik.notification_proto.data.College
+import org.jik.notification_proto.fragment.FragmentSelection
 import org.json.JSONObject
 
 class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<SelectionAdapter.Holder>() {
     var cnt = 0
+    var selectedPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectionAdapter.Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_college, parent,false)
         return Holder(view)
@@ -22,7 +25,24 @@ class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<S
 
     override fun onBindViewHolder(holder: SelectionAdapter.Holder, position: Int) {
         holder.bind(colleges[position])
-        // 단대 버튼이 클릭되면 json파일을 가져와 위치가 동일한 (같은) 단대의 학과들을 colleges에 추가시킴으로 view 업데이트
+        // 선택이 되었을 때와 안 되었을 때 버튼의 background drawable 을  변경
+        if (selectedPosition == position){
+//            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = true
+            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn_select)
+
+//            var btntext = holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).text.toString()
+
+//            val bundle = Bundle()
+//
+//            bundle.putString("KEY", btntext)
+//            Log.d("asdas",btntext)
+//
+//            FragmentSelection().arguments = bundle
+        }else{
+//            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = false
+            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn)
+        }
+        // 단대 버튼이 클릭되면 json 파일을 가져와 위치가 동일한 (같은) 단대의 학과들을 colleges 에 추가시킴으로 view 업데이트
         holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setOnClickListener {
             cnt += 1
             if (cnt < 2) {
@@ -43,12 +63,17 @@ class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<S
                 }
                 notifyDataSetChanged()
             }
+            // 두 번이상 클릭 == 학과 선택화면일 때를 의미
             if(cnt >= 2){
-                holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundColor(
-                    Color.parseColor("#484848"))
-                Log.d("sdf",cnt.toString())
+                //  선택된 버튼의 position 을 업데이트
+                if (selectedPosition >= 0) {
+                    notifyItemChanged(selectedPosition)
+                }
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(selectedPosition)
             }
         }
+
     }
 
     override fun getItemCount(): Int = colleges.size
