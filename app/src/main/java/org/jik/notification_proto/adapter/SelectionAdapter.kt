@@ -10,10 +10,11 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
 import org.jik.notification_proto.data.College
+import org.jik.notification_proto.fragment.FragmentKeyword
 import org.jik.notification_proto.fragment.FragmentSelection
 import org.json.JSONObject
 
-class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<SelectionAdapter.Holder>() {
+class SelectionAdapter(val colleges:MutableList<College>, var link : FragmentSelection.roomListAdapterToList):RecyclerView.Adapter<SelectionAdapter.Holder>() {
     var cnt = 0
     var selectedPosition = -1
 
@@ -24,24 +25,26 @@ class SelectionAdapter(val colleges:MutableList<College>):RecyclerView.Adapter<S
     }
 
     override fun onBindViewHolder(holder: SelectionAdapter.Holder, position: Int) {
-        holder.bind(colleges[position])
+            holder.bind(colleges[position])
         // 선택이 되었을 때와 안 되었을 때 버튼의 background drawable 을  변경
         if (selectedPosition == position){
 //            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = true
             holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn_select)
 
-//            var btntext = holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).text.toString()
+            val btntext = holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).text.toString()
+            link.getRoomId(btntext)
 
 //            val bundle = Bundle()
 //
-//            bundle.putString("KEY", btntext)
-//            Log.d("asdas",btntext)
+//            bundle.putString("KEY",btntext)
+//            Log.d("asdas", bundle.getString("KEY").toString())
 //
 //            FragmentSelection().arguments = bundle
         }else{
 //            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = false
             holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn)
         }
+
         // 단대 버튼이 클릭되면 json 파일을 가져와 위치가 동일한 (같은) 단대의 학과들을 colleges 에 추가시킴으로 view 업데이트
         holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setOnClickListener {
             cnt += 1
