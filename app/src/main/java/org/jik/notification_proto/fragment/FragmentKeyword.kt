@@ -132,7 +132,7 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
                     if (map.containsKey(enteredKeyword)) {
                         num = (map.getValue(enteredKeyword).toInt() + 1).toString() // 구독자 수 +1
                     }
-                    databaseReference.child("keywords").child(enteredKeyword).setValue(num)
+                    databaseReference.child("college").child("컴퓨터공학부").child(enteredKeyword).setValue(num)
                 }
                 else Log.d("network","네트워크 상태가 불안정 합니다.")
             }

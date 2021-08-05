@@ -10,6 +10,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.kimcore.inko.Inko
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.SelectionAdapter
 import org.jik.notification_proto.data.College
@@ -17,6 +23,9 @@ import org.json.JSONObject
 
 class FragmentSelection : Fragment() {
     lateinit var recyclerview : RecyclerView
+    private val databaseReference = FirebaseDatabase.getInstance().reference
+    private val inko = Inko()
+
 
     // 먼저 위에서 변수를 선언해 놓아야 onCreateView 에서도 변수를 사용할 수 있다.
     lateinit var enrollcollege:String
@@ -54,9 +63,14 @@ class FragmentSelection : Fragment() {
 
         recyclerview.adapter = SelectionAdapter(collegelist,link)
 
+
         val keyword = FragmentKeyword()
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.main_content,keyword).addToBackStack(null).commit()
+            databaseReference.child("college").setValue(enrollcollege)
+            var englishcollege = inko.ko2en(enrollcollege)
+            Firebase.messaging.subscribeToTopic(englishcollege)
+            Log.d("englishcollege",englishcollege)
         }
 
         return view
