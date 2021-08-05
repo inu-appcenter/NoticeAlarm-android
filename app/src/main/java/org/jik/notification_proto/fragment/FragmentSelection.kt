@@ -2,6 +2,7 @@ package org.jik.notification_proto.fragment
 
 import android.content.res.AssetManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,16 @@ import org.json.JSONObject
 
 class FragmentSelection : Fragment() {
     lateinit var recyclerview : RecyclerView
+
+    // 먼저 위에서 변수를 선언해 놓아야 onCreateView 에서도 변수를 사용할 수 있다.
+    lateinit var enrollcollege:String
+
+    // 어답터에서 값을 fragment 로 가져오기 위한 class 구문
+    inner class roomListAdapterToList {
+        fun getRoomId(college: String){
+            enrollcollege = college
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +49,10 @@ class FragmentSelection : Fragment() {
 
         recyclerview = view.findViewById(R.id.selection_recyclerView) as RecyclerView
         recyclerview.layoutManager = LinearLayoutManager(activity)
-        recyclerview.adapter = SelectionAdapter(collegelist)
+        // 어답터에서 값을 fragment 로 가져오기 위한 class 를 adapter 로 전달
+        val link = roomListAdapterToList()
+
+        recyclerview.adapter = SelectionAdapter(collegelist,link)
 
         val keyword = FragmentKeyword()
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
