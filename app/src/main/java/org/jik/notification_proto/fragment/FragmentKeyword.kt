@@ -145,9 +145,9 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     var num = map.getValue(enteredKeyword).toInt() - 1 // 구독자 수 -1
-                    databaseReference.child("keywords").child(enteredKeyword).setValue(num.toString())
+                    databaseReference.child("college").child("컴퓨터공학부").child(enteredKeyword).setValue(num.toString())
                     if(num == 0){
-                        databaseReference.child("keywords").child(enteredKeyword).removeValue()
+                        databaseReference.child("college").child("컴퓨터공학부").child(enteredKeyword).removeValue()
                     }
                 } else Log.d("network", "네트워크 상태가 불안정 합니다.")
             }
