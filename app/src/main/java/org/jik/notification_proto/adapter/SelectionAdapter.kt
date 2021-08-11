@@ -34,12 +34,6 @@ class SelectionAdapter(val colleges:MutableList<College>, var link : FragmentSel
             val btntext = holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).text.toString()
             link.getRoomId(btntext)
 
-//            val bundle = Bundle()
-//
-//            bundle.putString("KEY",btntext)
-//            Log.d("asdas", bundle.getString("KEY").toString())
-//
-//            FragmentSelection().arguments = bundle
         }else{
 //            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = false
             holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn)

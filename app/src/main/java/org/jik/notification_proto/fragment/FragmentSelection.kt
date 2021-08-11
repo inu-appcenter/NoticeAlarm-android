@@ -32,8 +32,6 @@ import org.json.JSONObject
 @SuppressLint("StaticFieldLeak")
 class FragmentSelection : Fragment() {
     lateinit var recyclerview : RecyclerView
-    private val databaseReference = FirebaseDatabase.getInstance().reference
-    private val inko = Inko()
 
     // keyworddb
     lateinit var  keyworddb : KeywordDatabase
@@ -94,7 +92,6 @@ class FragmentSelection : Fragment() {
             }
 
             if (savedContacts.isNotEmpty()) {
-                Log.d("asfsd", savedContacts.toString())
                 lastcollege.addAll(savedContacts)
             }
         }
@@ -104,28 +101,13 @@ class FragmentSelection : Fragment() {
 
         val keyword = FragmentKeyword()
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
-            val bundle = Bundle()
-            setFragmentResult("requestKey", bundleOf("bundleKey" to enrollcollege))
-
-
             parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
-            databaseReference.child("college").child(enrollcollege).child("장희직").setValue(-999999)
-            var englishcollege = inko.ko2en(enrollcollege)
-            Firebase.messaging.subscribeToTopic(englishcollege)
-            Log.d("englishcollege", englishcollege)
-
-            Log.d("sdfsdf",lastcollege.toString())
-            if (lastcollege.isNotEmpty()) {
-                databaseReference.child("college").child(lastcollege[0].college).removeValue()
-            }
             // 전에 들어가 있던 keyword db의 내용을 삭제
-            deleteAllKeyword()
+//            deleteAllKeyword()
             // 전에 들어가 있던 college db의 내용을 삭제
             deleteAllCollege()
             // college db에 삽입
             val insertcollege = CollegeEntity(null, enrollcollege)
-
-
 
             insertCollege(insertcollege)
         }

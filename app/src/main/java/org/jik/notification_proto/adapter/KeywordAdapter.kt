@@ -22,7 +22,6 @@ class KeywordAdapter(var keywords: List<KeywordEntity>,var onDeleteListener: OnD
         holder.keywordname.text = keyword.keyword
         holder.keyworddelete.setOnClickListener {
             onDeleteListener.onDeleteListener(keyword)
-            onDeleteListener.onSubscribeListener(keyword.keyword)
         }
     }
 
