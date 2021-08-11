@@ -18,6 +18,8 @@ interface KeywordDAO {
     @Delete
     fun delete(keyword: KeywordEntity)
 
+    @Query("DELETE from keyword")
+    fun deleteAll()
 }
 
 

@@ -33,4 +33,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/enroll_college"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="학과를 선택하세요"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/initial_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
