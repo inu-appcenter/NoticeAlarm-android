@@ -1,6 +1,7 @@
 package org.jik.notification_proto.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -22,12 +23,17 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.SelectionAdapter
+import org.jik.notification_proto.api.APIS
+import org.jik.notification_proto.api.UpdateModel
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
 import org.jik.notification_proto.data.College
 import org.jik.notification_proto.keyword.KeywordDatabase
 import org.jik.notification_proto.keyword.KeywordEntity
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @SuppressLint("StaticFieldLeak")
 class FragmentSelection : Fragment() {
@@ -103,13 +109,27 @@ class FragmentSelection : Fragment() {
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
             parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
             // 전에 들어가 있던 keyword db의 내용을 삭제
-//            deleteAllKeyword()
+            // deleteAllKeyword()
             // 전에 들어가 있던 college db의 내용을 삭제
             deleteAllCollege()
             // college db에 삽입
             val insertcollege = CollegeEntity(null, enrollcollege)
-
             insertCollege(insertcollege)
+
+            // 학과 업데이트 내용을 서버로 전달
+            val token = this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+            var updatedata = UpdateModel(token = token, major = "정보통신공학과")
+            Log.d("updatedata", updatedata.toString())
+            APIS.create().update_users(updatedata).enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    Log.d("log", response.toString())
+                    Log.d("log", response.body().toString())                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("log", t.printStackTrace().toString())
+                    Log.d("log", "fail")
+                }
+            })
         }
         return view
     }

@@ -1,6 +1,7 @@
 package org.jik.notification_proto.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -26,13 +27,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.jik.notification_proto.MainActivity
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.KeywordAdapter
+import org.jik.notification_proto.api.APIS
+import org.jik.notification_proto.api.PostModel
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
 import org.jik.notification_proto.keyword.KeywordDatabase
 import org.jik.notification_proto.keyword.KeywordEntity
 import org.jik.notification_proto.keyword.OnDeleteListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.concurrent.thread
 
 @SuppressLint("StaticFieldLeak")
@@ -77,6 +84,22 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
             view.findViewById<EditText>(R.id.edit_keyword).text.clear()
             val keyword = KeywordEntity(null, edittext)
             insertKeyword(keyword)
+
+            // 키워드 등록 내용을 서버로 전달
+            val token =this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+            Log.d("토큰 값: ",token.toString())
+            val data = PostModel(major = enroll[0].college,token = token, keyword = edittext)
+            Log.d("postdata",data.toString())
+            APIS.create().post_users(data).enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    Log.d("log", response.toString())
+                    Log.d("log", response.body().toString())                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("log", t.printStackTrace().toString())
+                    Log.d("log", "fail")                }
+
+            })
         }
 
 
