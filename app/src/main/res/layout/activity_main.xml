@@ -33,7 +33,8 @@
 
                 <TextView
                     style="@style/toolBarText"
-                    android:text="key Word"
+                    android:text="공지 알리미"
+                    android:textColor="@color/mainBlue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

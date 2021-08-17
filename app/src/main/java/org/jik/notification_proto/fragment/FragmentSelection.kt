@@ -47,7 +47,7 @@ class FragmentSelection : Fragment() {
     var enroll = listOf<CollegeEntity>()
 
     // 전의 학과를 알기위해 생성
-    var lastcollege = mutableListOf<CollegeEntity>()
+//    var lastcollege = mutableListOf<CollegeEntity>()
 
 
     // 먼저 위에서 변수를 선언해 놓아야 onCreateView 에서도 변수를 사용할 수 있다.
@@ -91,18 +91,18 @@ class FragmentSelection : Fragment() {
 
         recyclerview.adapter = SelectionAdapter(collegelist,link)
 
-        val r = Runnable {
-            val savedContacts = collegedb.collegeDAO().getAll()
-            if (lastcollege.isNotEmpty()) {
-                lastcollege.removeAt(0)
-            }
-
-            if (savedContacts.isNotEmpty()) {
-                lastcollege.addAll(savedContacts)
-            }
-        }
-        val addThread = Thread(r)
-        addThread.start()
+//        val r = Runnable {
+//            val savedContacts = collegedb.collegeDAO().getAll()
+//            if (lastcollege.isNotEmpty()) {
+//                lastcollege.removeAt(0)
+//            }
+//
+//            if (savedContacts.isNotEmpty()) {
+//                lastcollege.addAll(savedContacts)
+//            }
+//        }
+//        val addThread = Thread(r)
+//        addThread.start()
 
 
         val keyword = FragmentKeyword()
@@ -118,7 +118,7 @@ class FragmentSelection : Fragment() {
 
             // 학과 업데이트 내용을 서버로 전달
             val token = this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
-            var updatedata = UpdateModel(token = token, major = "정보통신공학과")
+            var updatedata = UpdateModel(token = token, major = enrollcollege)
             Log.d("updatedata", updatedata.toString())
             APIS.create().update_users(updatedata).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
@@ -176,12 +176,12 @@ class FragmentSelection : Fragment() {
     }
 
     // keyword 를 다 지우는 함수
-    fun deleteAllKeyword(){
-        val deletekeywordTask = object :AsyncTask<Unit,Unit,Unit>(){
-            override fun doInBackground(vararg p0: Unit?) {
-                keyworddb.keywordDAO().deleteAll()
-            }
-        }
-        deletekeywordTask.execute()
-    }
+//    fun deleteAllKeyword(){
+//        val deletekeywordTask = object :AsyncTask<Unit,Unit,Unit>(){
+//            override fun doInBackground(vararg p0: Unit?) {
+//                keyworddb.keywordDAO().deleteAll()
+//            }
+//        }
+//        deletekeywordTask.execute()
+//    }
 }

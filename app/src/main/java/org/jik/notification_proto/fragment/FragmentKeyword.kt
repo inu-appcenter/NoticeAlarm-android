@@ -48,7 +48,6 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
     lateinit var keyworddb : KeywordDatabase
     var keywordList = listOf<KeywordEntity>()
 
-    // 한 영 변환
     var enroll = mutableListOf<CollegeEntity>()
 
     override fun onCreateView(
