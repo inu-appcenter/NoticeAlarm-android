@@ -16,6 +16,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.kimcore.inko.Inko
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -73,7 +74,8 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         keyworddb = KeywordDatabase.getInstance(activity?.applicationContext!!)!!
 
         activity?.runOnUiThread {
-            view.findViewById<RecyclerView>(R.id.keyword_recyclerView).layoutManager = LinearLayoutManager(activity)
+            // LinearLayoutManager 에서  flexbox 로 바꿈 그런데 에러가 한번 뜸 지켜봐야 할 듯
+            view.findViewById<RecyclerView>(R.id.keyword_recyclerView).layoutManager = FlexboxLayoutManager(activity)
         }
         getAllKeywords()
 

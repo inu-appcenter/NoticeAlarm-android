@@ -78,6 +78,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="22dp"
         android:text="✔ 등록한 키워드"
+        android:textSize="15sp"
         android:textColor="@color/mainBlue"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

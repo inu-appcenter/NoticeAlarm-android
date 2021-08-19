@@ -12,9 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notification_Proto"
         android:usesCleartextTraffic="true">
-        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+        <activity
+            android:name=".HomeActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_name" />
-        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/mainBlue" />
         <service
             android:name=".FireBaseMessagingService"
@@ -24,11 +32,11 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing">
+        <activity
+            android:name=".SplashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
