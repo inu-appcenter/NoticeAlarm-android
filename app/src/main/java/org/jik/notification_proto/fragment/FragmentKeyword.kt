@@ -103,9 +103,10 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
             })
         }
 
-
-        view.findViewById<TextView>(R.id.delete).setOnClickListener {
-            view.findViewById<EditText>(R.id.edit_keyword).text.clear()
+        activity?.runOnUiThread {
+            view.findViewById<TextView>(R.id.delete).setOnClickListener {
+                view.findViewById<EditText>(R.id.edit_keyword).text.clear()
+            }
         }
         }
 

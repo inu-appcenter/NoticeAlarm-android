@@ -1,15 +1,12 @@
 package org.jik.notification_proto.adapter
 
-import android.graphics.Color
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.flexbox.FlexboxLayoutManager
 import org.jik.notification_proto.R
 import kotlin.math.roundToInt
 
@@ -28,7 +25,7 @@ class HomeAdapter(private val content:MutableList<String>) : RecyclerView.Adapte
         val param = btn.layoutParams as ViewGroup.MarginLayoutParams
         // 각 btn 의 색상을 position 에 맞게 변경
         if (position % 4 == 0 || (position-3) % 4 == 0) {
-            btn.setBackgroundColor(Color.RED)
+            btn.background = holder.itemView.resources.getDrawable(R.drawable.home_btn_yellow)
         }
         // Int 를 dp 로 바꾸는 함수
         fun changeDP(value : Int) : Int{

@@ -11,9 +11,9 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:text="#장학금"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="20sp"
-        android:background="@color/mainBlue"
+        android:background="@drawable/home_btn_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
