@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
+import org.jik.notification_proto.SelectionActivity
 import org.jik.notification_proto.data.College
 import org.jik.notification_proto.fragment.FragmentKeyword
 import org.jik.notification_proto.fragment.FragmentSelection
 import org.json.JSONObject
-
-class SelectionAdapter(val colleges:MutableList<College>, var link : FragmentSelection.roomListAdapterToList):RecyclerView.Adapter<SelectionAdapter.Holder>() {
+                                                            // 원래는 FragmentSelection.roomListAdapterToList 로 했었다
+class SelectionAdapter(val colleges:MutableList<College>, var link: SelectionActivity.roomListAdapterToList):RecyclerView.Adapter<SelectionAdapter.Holder>() {
     var cnt = 0
     var selectedPosition = -1
 

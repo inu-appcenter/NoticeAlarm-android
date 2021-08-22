@@ -1,6 +1,7 @@
 package org.jik.notification_proto.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import org.jik.notification_proto.R
+import org.jik.notification_proto.SelectionActivity
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
 import org.jik.notification_proto.keyword.KeywordEntity
@@ -30,7 +32,11 @@ class FragmentInitial : Fragment() {
 
         val selection = FragmentSelection()
         view.findViewById<AppCompatButton>(R.id.initial_btn).setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.main_content,selection).addToBackStack(null).commit()
+            // 그냥 selection 액티비티로 화면 전환
+            val intent_selection = Intent(activity, SelectionActivity::class.java)
+            intent_selection.putExtra("what_activity","initial")
+            startActivity(intent_selection)
+//            parentFragmentManager.beginTransaction().replace(R.id.main_content,selection).addToBackStack(null).commit()
             //(activity as MainActivity).supportFragmentManager.beginTransaction()
               //  .replace(R.id.main_content, selection).commit()
         }

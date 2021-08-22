@@ -1,25 +1,23 @@
-package org.jik.notification_proto.fragment
+package org.jik.notification_proto
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.res.AssetManager
 import android.os.AsyncTask
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.SelectionAdapter
 import org.jik.notification_proto.api.APIS
 import org.jik.notification_proto.api.UpdateModel
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
 import org.jik.notification_proto.data.College
+import org.jik.notification_proto.fragment.FragmentKeyword
 import org.jik.notification_proto.keyword.KeywordDatabase
 import org.json.JSONObject
 import retrofit2.Call
@@ -27,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @SuppressLint("StaticFieldLeak")
-class FragmentSelection : Fragment() {
+class SelectionActivity : AppCompatActivity() {
     lateinit var recyclerview : RecyclerView
 
     // keyworddb
@@ -35,12 +33,6 @@ class FragmentSelection : Fragment() {
 
     // db
     lateinit var collegedb : CollegeDatabase
-    var enroll = listOf<CollegeEntity>()
-
-    // 전의 학과를 알기위해 생성
-//    var lastcollege = mutableListOf<CollegeEntity>()
-
-
     // 먼저 위에서 변수를 선언해 놓아야 onCreateView 에서도 변수를 사용할 수 있다.
     lateinit var enrollcollege:String
 
@@ -50,21 +42,20 @@ class FragmentSelection : Fragment() {
             enrollcollege = college
         }
     }
+    var enroll = listOf<CollegeEntity>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_selection)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view =  inflater.inflate(R.layout.fragment__selection, container, false)
 
         // db
-        collegedb = CollegeDatabase.getInstance(activity?.applicationContext!!)!!
-        keyworddb = KeywordDatabase.getInstance(activity?.applicationContext!!)!!
+        collegedb = CollegeDatabase.getInstance(applicationContext!!)!!
+        keyworddb = KeywordDatabase.getInstance(applicationContext!!)!!
 
         val collegelist :MutableList<College> = mutableListOf()
 
         // json 파일 가져와서 collegelist에 추가시켜주기
-        val assetManager: AssetManager = context?.resources?.assets!!
+        val assetManager: AssetManager = this?.resources?.assets!!
         val inputStream= assetManager.open("json/INU.json")
         val jsonString = inputStream.bufferedReader().use { it.readText() }
         val jObject = JSONObject(jsonString)
@@ -73,34 +64,29 @@ class FragmentSelection : Fragment() {
             val iObject = jsonArray.getJSONObject(i)
             val college = iObject.getString("college")
             collegelist.add(College(college))
-       }
+        }
 
-        recyclerview = view.findViewById(R.id.selection_recyclerView) as RecyclerView
-        recyclerview.layoutManager = LinearLayoutManager(activity)
+        recyclerview = findViewById<RecyclerView>(R.id.selection_recyclerView_activity)
+        recyclerview.layoutManager = LinearLayoutManager(this)
         // 어답터에서 값을 fragment 로 가져오기 위한 class 를 adapter 로 전달
         val link = roomListAdapterToList()
 
         // link 를 원래는 FragmentSelection 으로 되어야하는데 바꿈 일시적으로
-
-//        recyclerview.adapter = SelectionAdapter(collegelist,link)
-
-//        val r = Runnable {
-//            val savedContacts = collegedb.collegeDAO().getAll()
-//            if (lastcollege.isNotEmpty()) {
-//                lastcollege.removeAt(0)
-//            }
-//
-//            if (savedContacts.isNotEmpty()) {
-//                lastcollege.addAll(savedContacts)
-//            }
-//        }
-//        val addThread = Thread(r)
-//        addThread.start()
-
+        recyclerview.adapter = SelectionAdapter(collegelist,link)
 
         val keyword = FragmentKeyword()
-        view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
+        findViewById<AppCompatButton>(R.id.select_btn_activity).setOnClickListener {
+            val what = intent.getStringExtra("what_activity")
+            Log.d("what",what.toString())
+            // 선택 버튼을 누르면 HomeActivity로 가게끔 해놓음
+            if (what == "initial"){
+                val intent_home = Intent(this, HomeActivity::class.java)
+                startActivity(intent_home)
+            }
+            else if (what == "home"){
+                finish()
+            }
+//            parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
             // 전에 들어가 있던 keyword db의 내용을 삭제
             // deleteAllKeyword()
             // 전에 들어가 있던 college db의 내용을 삭제
@@ -110,7 +96,7 @@ class FragmentSelection : Fragment() {
             insertCollege(insertcollege)
 
             // 학과 업데이트 내용을 서버로 전달
-            val token = this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+            val token = this.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
             var updatedata = UpdateModel(token = token, major = enrollcollege)
             Log.d("updatedata", updatedata.toString())
             APIS.create().update_users(updatedata).enqueue(object : Callback<String> {
@@ -124,9 +110,7 @@ class FragmentSelection : Fragment() {
                 }
             })
         }
-        return view
     }
-
     fun insertCollege(college: CollegeEntity){
         val insertTask = object : AsyncTask<Unit, Unit, Unit>(){
             override fun doInBackground(vararg p0: Unit?) {
@@ -141,7 +125,7 @@ class FragmentSelection : Fragment() {
     }
 
     fun getAllColleges(){
-        val getTask = object : AsyncTask<Unit,Unit,Unit>(){
+        val getTask = object : AsyncTask<Unit, Unit, Unit>(){
             override fun doInBackground(vararg p0: Unit?) {
                 enroll = collegedb.collegeDAO().getAll()
             }
@@ -155,7 +139,7 @@ class FragmentSelection : Fragment() {
 
     // db의 모든 데이터를 지우는 함수
     fun deleteAllCollege(){
-        val deleteTask = object :AsyncTask<Unit,Unit,Unit>(){
+        val deleteTask = object : AsyncTask<Unit, Unit, Unit>(){
             override fun doInBackground(vararg p0: Unit?) {
                 collegedb.collegeDAO().deleteAll()
             }
@@ -167,14 +151,4 @@ class FragmentSelection : Fragment() {
         }
         deleteTask.execute()
     }
-
-    // keyword 를 다 지우는 함수
-//    fun deleteAllKeyword(){
-//        val deletekeywordTask = object :AsyncTask<Unit,Unit,Unit>(){
-//            override fun doInBackground(vararg p0: Unit?) {
-//                keyworddb.keywordDAO().deleteAll()
-//            }
-//        }
-//        deletekeywordTask.execute()
-//    }
 }
