@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.adapter.SelectionAdapter
 import org.jik.notification_proto.api.APIS
+import org.jik.notification_proto.api.InitialModel
 import org.jik.notification_proto.api.UpdateModel
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
@@ -76,15 +77,53 @@ class SelectionActivity : AppCompatActivity() {
 
         val keyword = FragmentKeyword()
         findViewById<AppCompatButton>(R.id.select_btn_activity).setOnClickListener {
+
+            // 업데이트와 초기선택을 위한 데이터들 값저장
+            val token = this.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+            var updatedata = UpdateModel(token = token, major = enrollcollege)
+            var initialdata = InitialModel(token = token, major = enrollcollege)
+
             val what = intent.getStringExtra("what_activity")
             Log.d("what",what.toString())
-            // 선택 버튼을 누르면 HomeActivity로 가게끔 해놓음
+            // initial 프래그먼트에서 이 액티비티로 왔으면
             if (what == "initial"){
                 val intent_home = Intent(this, HomeActivity::class.java)
+                // 뒤로가기 제거
+                intent_home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                intent_home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent_home)
+
+                // 학과 초기 선택 내용을 서버로 전달
+                Log.d("initialdata", initialdata.toString())
+                APIS.create().initial_users(initialdata).enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        Log.d("log", response.toString())
+                        Log.d("log", response.body().toString())                }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("log", t.printStackTrace().toString())
+                        Log.d("log", "fail")
+                    }
+                })
             }
+            // home 액티비티에서 이 액티비티로 왔으면
             else if (what == "home"){
+                // 이전의 화면으로 돌아가기
                 finish()
+
+                // 학과 업데이트 내용을 서버로 전달
+                Log.d("updatedata", updatedata.toString())
+                APIS.create().update_users(updatedata).enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        Log.d("log", response.toString())
+                        Log.d("log", response.body().toString())                }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("log", t.printStackTrace().toString())
+                        Log.d("log", "fail")
+                    }
+                })
             }
 //            parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
             // 전에 들어가 있던 keyword db의 내용을 삭제
@@ -95,20 +134,7 @@ class SelectionActivity : AppCompatActivity() {
             val insertcollege = CollegeEntity(null, enrollcollege)
             insertCollege(insertcollege)
 
-            // 학과 업데이트 내용을 서버로 전달
-            val token = this.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
-            var updatedata = UpdateModel(token = token, major = enrollcollege)
-            Log.d("updatedata", updatedata.toString())
-            APIS.create().update_users(updatedata).enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    Log.d("log", response.toString())
-                    Log.d("log", response.body().toString())                }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Log.d("log", t.printStackTrace().toString())
-                    Log.d("log", "fail")
-                }
-            })
         }
     }
     fun insertCollege(college: CollegeEntity){

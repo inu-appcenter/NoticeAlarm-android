@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="4dp">
+    android:padding="4dp"
+    android:paddingStart="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
@@ -21,7 +22,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
             android:text="장학금"
-            android:textColor="#A1000000"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +36,7 @@
             android:fontFamily="@font/noto_sans_bold"
             android:gravity="center"
             android:text="X"
-            android:textColor="#A1000000"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/keyword_name"
             app:layout_constraintTop_toTopOf="parent" />

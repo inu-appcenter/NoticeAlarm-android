@@ -1,6 +1,8 @@
 package org.jik.notification_proto
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +33,13 @@ class HomeActivity : AppCompatActivity() {
         adapter.fragmentList = fragmentList
         viewPager.adapter = adapter
 
+        val prefs : SharedPreferences = this.getSharedPreferences("prefs_name", Context.MODE_PRIVATE)
+        val default_lst  = mutableSetOf("default")
+
+        val result = prefs.getStringSet("장학",default_lst)
+        Log.d("장학",result.toString())
+
+
         // 여기서부터가 8/21일 새벽에 하던것들
         // 보류 페이지가 넘어가면서 동작을 추가하는 구문인데 이게 맞나??
         // 문제는 키워드 목록에서 키워드를 삭제하거나 추가하면 드래그해서 홈화면에서도 그 키워드로 view 가 적용이 되길 원함
@@ -38,6 +47,7 @@ class HomeActivity : AppCompatActivity() {
 //        settings 버튼 처리 Selection Activity 로 가게 해놓음
         findViewById<AppCompatButton>(R.id.setting_btn).setOnClickListener {
             val intent_selection = Intent(this, SelectionActivity::class.java)
+            // 후 처리를 위해 어느 곳에서 왔는지 값을 전달
             intent_selection.putExtra("what_activity","home")
             startActivity(intent_selection)
         }

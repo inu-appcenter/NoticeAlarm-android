@@ -100,7 +100,7 @@ class FragmentSelection : Fragment() {
 
         val keyword = FragmentKeyword()
         view.findViewById<AppCompatButton>(R.id.select_btn).setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).addToBackStack(null).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.main_content, keyword).commit()
             // 전에 들어가 있던 keyword db의 내용을 삭제
             // deleteAllKeyword()
             // 전에 들어가 있던 college db의 내용을 삭제

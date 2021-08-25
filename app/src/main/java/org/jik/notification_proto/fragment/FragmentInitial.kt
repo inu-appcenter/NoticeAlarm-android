@@ -34,6 +34,7 @@ class FragmentInitial : Fragment() {
         view.findViewById<AppCompatButton>(R.id.initial_btn).setOnClickListener {
             // 그냥 selection 액티비티로 화면 전환
             val intent_selection = Intent(activity, SelectionActivity::class.java)
+            // 후 처리를 위해 어느 곳에서 왔는지 값을 전달
             intent_selection.putExtra("what_activity","initial")
             startActivity(intent_selection)
 //            parentFragmentManager.beginTransaction().replace(R.id.main_content,selection).addToBackStack(null).commit()

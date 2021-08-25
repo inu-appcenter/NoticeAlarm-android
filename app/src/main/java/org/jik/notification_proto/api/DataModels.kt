@@ -15,3 +15,8 @@ data class UpdateModel(
         var token: String? = null,
         var major: String? = null
 )
+
+data class InitialModel(
+        var token: String? = null,
+        var major: String? = null
+)

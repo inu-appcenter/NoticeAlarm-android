@@ -5,16 +5,21 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import org.jik.notification_proto.keyword.KeywordDatabase
 
 class FireBaseMessagingService : FirebaseMessagingService() {
 
     private val TAG = "FirebaseService"
+
+    val alarmMap :MutableMap<String,ArrayList<String>> = mutableMapOf()
+
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "new Token: $token")
@@ -24,19 +29,34 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         val editor = pref.edit()
         editor.putString("token", token).apply()
         editor.commit()
-        Log.d("로그: ", "성공적으로 토큰을 저장함")
         Log.i("로그: ", "성공적으로 토큰을 저장함")
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage!!.from)
-//        val currentTitle = remoteMessage!!.data["title"]
-//        val prefNotice = this.getSharedPreferences("lastTitle", Context.MODE_PRIVATE)
-//        val lastTitle = prefNotice.getString("lastTitle", "null")
-
+        Log.d(TAG, "From: " + remoteMessage.from)
         if(remoteMessage.data.isNotEmpty()){
-            Log.i("바디: ", remoteMessage.data["body"].toString())
-            Log.i("타이틀: ", remoteMessage.data["title"].toString())
+            val title = remoteMessage.data["title"].toString()
+            val message = remoteMessage.data["message"].toString()
+
+            Log.i("제목: ", title)
+            Log.i("내용: ", message)
+
+            Log.d("keys",alarmMap.keys.toString())
+            // 제목(키워드값)을 db에서 가져오는게 힘들어 차피 제목이 키워드값이니 map의 key값에 키워드가 없다면 초기화해준다
+            if (title !in alarmMap.keys){
+                alarmMap[title] = arrayListOf()
+            }
+
+            //알람오는 것들을 제목별로 저장
+            val lst  = alarmMap[title]
+            Log.d("lst",lst.toString())
+            lst?.add(message)
+            alarmMap[title] = lst!!
+
+            // 저장한 것 들을 SharedPreferences 로 local db에 저장 key = 제목으로
+            val prefs : SharedPreferences = this.getSharedPreferences("prefs_name",Context.MODE_PRIVATE)
+            prefs.edit().putStringSet(title, alarmMap[title]?.toMutableSet()).apply()
+
             sendNotification(remoteMessage)
         }
 
@@ -45,31 +65,14 @@ class FireBaseMessagingService : FirebaseMessagingService() {
             Log.i("data값: ", remoteMessage.data.toString())
         }
 
-//        if(currentTitle != lastTitle) {
-//            Log.d("이상한오작동",remoteMessage.data["title"].toString())
-//
-//            if (remoteMessage.data.isNotEmpty()) {
-//                sendNotification(remoteMessage)
-//                Log.d("작동",remoteMessage.data["title"].toString())
-//            }
-//            Log.d("오작동",remoteMessage.data["title"].toString())
-//            val editor = prefNotice.edit()
-//            editor.putString("lastTitle", remoteMessage.data["title"]).apply()
-//            editor.commit()
-//        }
     }
 
-    // 새로운 토큰이 생성 될 때 호출
-//    override fun onNewToken(token: String)
-//    {
-//        Log.d(TAG, "Refreshed token : $token")
-//        super.onNewToken(token)
-//    }
 
     private fun sendNotification(remoteMessage: RemoteMessage)
     {
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
-        val intent = Intent(this, MainActivity::class.java)
+        // 알림 클릭하면 실행되는 activity 를 HomeActivity 로
+        val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, uniId /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT)
@@ -78,8 +81,8 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(remoteMessage.data["body"].toString())
-            .setContentText(remoteMessage.data["title"].toString())
+            .setContentTitle(remoteMessage.data["title"].toString())
+            .setContentText(remoteMessage.data["message"].toString())
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)

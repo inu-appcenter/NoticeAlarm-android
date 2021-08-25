@@ -33,6 +33,13 @@ interface APIS {
             @Body jsonparams: UpdateModel
     ): Call<String>
 
+    @POST("/student")
+    @Headers("accept: application/json",
+            "content-type: application/json")
+    fun initial_users(
+            @Body jsonparams: InitialModel
+    ): Call<String>
+
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "http://3.38.60.57:8001" // 주소
 
