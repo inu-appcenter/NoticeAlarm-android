@@ -1,13 +1,18 @@
 package org.jik.notification_proto.adapter
 
+import android.content.Intent
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import org.jik.notification_proto.HomeActivity
+import org.jik.notification_proto.NoticeActivity
 import org.jik.notification_proto.R
+import org.jik.notification_proto.SelectionActivity
 import kotlin.math.roundToInt
 
 class HomeAdapter(private val content:MutableList<String>) : RecyclerView.Adapter<HomeAdapter.Holder>() {
@@ -39,6 +44,11 @@ class HomeAdapter(private val content:MutableList<String>) : RecyclerView.Adapte
         }
         holder.bind(content[position])
 
+        btn.setOnClickListener {
+            val notice_intent = Intent(holder.itemView.context, NoticeActivity::class.java)
+            notice_intent.putExtra("keyword",btn.text)
+            holder.itemView.context.startActivity(notice_intent)
+        }
     }
 
     override fun getItemCount(): Int = content.size

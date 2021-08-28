@@ -18,8 +18,7 @@ class FireBaseMessagingService : FirebaseMessagingService() {
 
     private val TAG = "FirebaseService"
 
-    val alarmMap :MutableMap<String,ArrayList<String>> = mutableMapOf()
-
+    var alarmMap :MutableMap<String,String> = mutableMapOf()
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "new Token: $token")
@@ -37,25 +36,21 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         if(remoteMessage.data.isNotEmpty()){
             val title = remoteMessage.data["title"].toString()
             val message = remoteMessage.data["message"].toString()
-
+            val date = remoteMessage.data["date"].toString()
             Log.i("제목: ", title)
             Log.i("내용: ", message)
-
-            Log.d("keys",alarmMap.keys.toString())
-            // 제목(키워드값)을 db에서 가져오는게 힘들어 차피 제목이 키워드값이니 map의 key값에 키워드가 없다면 초기화해준다
-            if (title !in alarmMap.keys){
-                alarmMap[title] = arrayListOf()
+            Log.i("날짜: ", date)
+            Log.d("alarmMap",alarmMap.toString())
+            if(title !in alarmMap.keys){
+                alarmMap[title] = ""
             }
+            var tempdata = alarmMap[title]
+            tempdata += title + "," + message + "," + date+","
+            alarmMap[title] = tempdata!!
 
-            //알람오는 것들을 제목별로 저장
-            val lst  = alarmMap[title]
-            Log.d("lst",lst.toString())
-            lst?.add(message)
-            alarmMap[title] = lst!!
-
-            // 저장한 것 들을 SharedPreferences 로 local db에 저장 key = 제목으로
+            // 저장한 것 들을 SharedPreferences 로 local db에 저장
             val prefs : SharedPreferences = this.getSharedPreferences("prefs_name",Context.MODE_PRIVATE)
-            prefs.edit().putStringSet(title, alarmMap[title]?.toMutableSet()).apply()
+            prefs.edit().putString(title, alarmMap[title]).apply()
 
             sendNotification(remoteMessage)
         }

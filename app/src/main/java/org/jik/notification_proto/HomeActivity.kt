@@ -33,11 +33,7 @@ class HomeActivity : AppCompatActivity() {
         adapter.fragmentList = fragmentList
         viewPager.adapter = adapter
 
-        val prefs : SharedPreferences = this.getSharedPreferences("prefs_name", Context.MODE_PRIVATE)
-        val default_lst  = mutableSetOf("default")
 
-        val result = prefs.getStringSet("장학",default_lst)
-        Log.d("장학",result.toString())
 
 
         // 여기서부터가 8/21일 새벽에 하던것들
