@@ -37,19 +37,24 @@ class FireBaseMessagingService : FirebaseMessagingService() {
             val title = remoteMessage.data["title"].toString()
             val message = remoteMessage.data["message"].toString()
             val date = remoteMessage.data["date"].toString()
+            val content = remoteMessage.data["content"].toString()
+
+            val prefs : SharedPreferences = this.getSharedPreferences("prefs_name",Context.MODE_PRIVATE)
+            // 이전의 알람 데이터들을 가져오기
+            val preData = prefs.getString(title,"default")
+            Log.d("이전 데이터",preData.toString())
+
+
             Log.i("제목: ", title)
             Log.i("내용: ", message)
             Log.i("날짜: ", date)
-            Log.d("alarmMap",alarmMap.toString())
-            if(title !in alarmMap.keys){
-                alarmMap[title] = ""
-            }
-            var tempdata = alarmMap[title]
-            tempdata += title + "," + message + "," + date+","
+            Log.i("내용: ", content)
+
+            var tempdata = preData
+            tempdata += title + "," + message + "," +content+","+ date+","
             alarmMap[title] = tempdata!!
 
             // 저장한 것 들을 SharedPreferences 로 local db에 저장
-            val prefs : SharedPreferences = this.getSharedPreferences("prefs_name",Context.MODE_PRIVATE)
             prefs.edit().putString(title, alarmMap[title]).apply()
 
             sendNotification(remoteMessage)

@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notification_Proto"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NoticeActivity"></activity>
+        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".NoticeActivity" />
         <activity android:name=".SelectionActivity" />
         <activity
             android:name=".HomeActivity"

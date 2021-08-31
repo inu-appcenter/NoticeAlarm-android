@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/item_constraintLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,19 +15,22 @@
     <TextView
         android:id="@+id/notice_title"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="19dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="85dp"
+        android:layout_marginEnd="19dp"
         android:gravity="start"
         android:text="2021-2학기 수강신청 일정 안내"
-        android:textColor="@color/black"
+        android:textColor="#191919"
+        android:textSize="19sp"
         android:textStyle="bold"
-        android:textSize="17sp"
+        android:maxLines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <!--
     <TextView
         android:id="@+id/notice_info"
         android:layout_width="0dp"
@@ -42,5 +47,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notice_title" />
-
+    !-->
 </androidx.constraintlayout.widget.ConstraintLayout>

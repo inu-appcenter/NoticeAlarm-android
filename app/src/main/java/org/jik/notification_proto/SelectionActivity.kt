@@ -3,6 +3,7 @@ package org.jik.notification_proto
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.AssetManager
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -77,6 +78,10 @@ class SelectionActivity : AppCompatActivity() {
 
         val keyword = FragmentKeyword()
         findViewById<AppCompatButton>(R.id.select_btn_activity).setOnClickListener {
+            // 공지내용 삭제
+            val prefs : SharedPreferences = this.getSharedPreferences("prefs_name", Context.MODE_PRIVATE)!!
+            prefs.edit().clear().apply()
+
 
             // 업데이트와 초기선택을 위한 데이터들 값저장
             val token = this.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")

@@ -51,9 +51,9 @@ class FragmentInitial : Fragment() {
                 view.findViewById<TextView>(R.id.enroll_college).text = enroll[0].college
             }
             if (savedContacts.isEmpty()){
-                activity?.runOnUiThread {
-                    Toast.makeText(context, "학과를 선택해주세요!", Toast.LENGTH_SHORT).show()
-                }
+//                activity?.runOnUiThread {
+//                    Toast.makeText(context, "학과를 선택해주세요!", Toast.LENGTH_SHORT).show()
+//                }
             }
 
         }
