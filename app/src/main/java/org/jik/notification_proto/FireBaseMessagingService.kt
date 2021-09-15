@@ -72,7 +72,7 @@ class FireBaseMessagingService : FirebaseMessagingService() {
     {
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
         // 알림 클릭하면 실행되는 activity 를 HomeActivity 로
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, uniId /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT)
