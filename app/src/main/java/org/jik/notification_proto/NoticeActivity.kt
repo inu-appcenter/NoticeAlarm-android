@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.adapter.NoticeListAdapter
+import org.jik.notification_proto.data.Notice
 
 class NoticeActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +23,13 @@ class NoticeActivity() : AppCompatActivity() {
         Log.d("받은 데이터",result.toString())
         var result_lst =result?.split(",")
 
-        var notice_title_lst = mutableListOf<String>()
+        var notice_inf_lst : MutableList<Notice> = mutableListOf()
         for (i in 0..result_lst?.size!!-1){
             if (i % 4 == 1){
-                notice_title_lst.add(result_lst[i])
+                val title = result_lst[i]
+                val date = result_lst[i+2]
+                var inf = Notice(title,date)
+                notice_inf_lst.add(inf)
             }
         }
 
@@ -37,6 +41,6 @@ class NoticeActivity() : AppCompatActivity() {
 
         val recyclerview= this.findViewById<RecyclerView>(R.id.recyclerView_list)
         recyclerview.layoutManager = LinearLayoutManager(this)
-        recyclerview.adapter = NoticeListAdapter(notice_title_lst, keyword.toString())
+        recyclerview.adapter = NoticeListAdapter(notice_inf_lst, keyword.toString())
     }
 }
