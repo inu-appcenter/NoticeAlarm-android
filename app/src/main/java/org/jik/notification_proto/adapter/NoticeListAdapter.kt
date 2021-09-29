@@ -40,11 +40,11 @@ class NoticeListAdapter(private var notices:MutableList<Notice>, private var get
 
     class Holder(View: View) : RecyclerView.ViewHolder(View){
         private val notice_title: TextView = itemView.findViewById(R.id.notice_title)
-        private val notice_date: TextView = itemView.findViewById(R.id.notice_date)
+        // private val notice_date: TextView = itemView.findViewById(R.id.notice_date)
 
         fun bind(notice:Notice){
             notice_title.text = notice.title
-            notice_date.text = notice.date
+            // notice_date.text = notice.date
         }
     }
 }

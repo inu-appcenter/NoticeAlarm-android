@@ -12,7 +12,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.jik.notification_proto.keyword.KeywordDatabase
 
 class FireBaseMessagingService : FirebaseMessagingService() {
 
@@ -33,29 +32,30 @@ class FireBaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.from)
+        Log.d("알람 데이터",remoteMessage.data.toString())
         if(remoteMessage.data.isNotEmpty()){
-            val title = remoteMessage.data["title"].toString()
-            val message = remoteMessage.data["message"].toString()
-            val date = remoteMessage.data["date"].toString()
-            val url = remoteMessage.data["url"].toString()
+            val keyword = remoteMessage.data["keyword"].toString()  // 키워드 값
+            val name = remoteMessage.data["name"].toString()   // 공지 제목
+            val link = remoteMessage.data["link"].toString()    // url
+
 
             val prefs : SharedPreferences = this.getSharedPreferences("prefs_name",Context.MODE_PRIVATE)
             // 이전의 알람 데이터들을 가져오기
-            val preData = prefs.getString(title,"default")
+            val preData = prefs.getString(keyword,"default")
             Log.d("이전 데이터",preData.toString())
 
 
-            Log.i("제목: ", title)
-            Log.i("내용: ", message)
-            Log.i("날짜: ", date)
-            Log.i("url: ", url)
+            Log.i("키워드: ", keyword)
+            Log.i("제목: ", name)
+            Log.i("링크: ", link)
+
 
             var tempdata = preData
-            tempdata += title + "," + message + "," +url+","+ date+","
-            alarmMap[title] = tempdata!!
+            tempdata += keyword + "," + name + "," +link+","
+            alarmMap[keyword] = tempdata!!
 
             // 저장한 것 들을 SharedPreferences 로 local db에 저장
-            prefs.edit().putString(title, alarmMap[title]).apply()
+            prefs.edit().putString(keyword, alarmMap[keyword]).apply()
 
             sendNotification(remoteMessage)
         }
@@ -64,14 +64,13 @@ class FireBaseMessagingService : FirebaseMessagingService() {
             Log.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
             Log.i("data값: ", remoteMessage.data.toString())
         }
-
     }
 
 
     private fun sendNotification(remoteMessage: RemoteMessage)
     {
         val uniId: Int = (System.currentTimeMillis() / 7).toInt()
-        // 알림 클릭하면 실행되는 activity 를 HomeActivity 로
+        // 알림 클릭하면 실행되는 activity 를 SplashActivity 로
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, uniId /* Request code */, intent,
@@ -80,9 +79,9 @@ class FireBaseMessagingService : FirebaseMessagingService() {
         val channelId = "my_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(remoteMessage.data["title"].toString())
-            .setContentText(remoteMessage.data["message"].toString())
+            .setSmallIcon(R.drawable.ic_stat_name)
+            .setContentTitle("#"+remoteMessage.data["keyword"].toString())
+            .setContentText("#"+remoteMessage.data["keyword"].toString()+" 알림이 왔습니다.")
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)

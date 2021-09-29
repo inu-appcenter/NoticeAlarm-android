@@ -25,13 +25,14 @@ class NoticeActivity() : AppCompatActivity() {
 
         var notice_inf_lst : MutableList<Notice> = mutableListOf()
         for (i in 0..result_lst?.size!!-1){
-            if (i % 4 == 1){
+            if (i % 3 == 1){
                 val title = result_lst[i]
-                val date = result_lst[i+2]
-                var inf = Notice(title,date)
+                Log.d("title",title)
+                var inf = Notice(title)
                 notice_inf_lst.add(inf)
             }
         }
+
 
         // 키워드 이름을 각 view 마다 따로 지정해서 바꿔줘야함
         findViewById<TextView>(R.id.keyword_title).text = "#$keyword"
