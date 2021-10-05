@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.jik.notification_proto.R
@@ -33,7 +34,7 @@ class SelectionAdapter(val colleges:MutableList<College>, var link: SelectionAct
             holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setBackgroundResource(R.drawable.depart_btn_select)
 
             val btntext = holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).text.toString()
-            link.getRoomId(btntext)
+            link.getRoomId(btntext,cnt)
 
         }else{
 //            holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).isSelected = false
@@ -42,6 +43,7 @@ class SelectionAdapter(val colleges:MutableList<College>, var link: SelectionAct
 
         // 단대 버튼이 클릭되면 json 파일을 가져와 위치가 동일한 (같은) 단대의 학과들을 colleges 에 추가시킴으로 view 업데이트
         holder.itemView.findViewById<AppCompatButton>(R.id.college_btn).setOnClickListener {
+            // Log.d("텍스트값",SelectionActivity().findViewById<TextView>(R.id.textView2).text.toString())
             cnt += 1
             if (cnt < 2) {
                 colleges.clear()
