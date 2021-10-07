@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.HTTP
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface APIS {
 
@@ -39,6 +36,14 @@ interface APIS {
     fun initial_users(
             @Body jsonparams: InitialModel
     ): Call<String>
+
+    @GET("/popular")
+    @Headers("accept: application/json",
+            "content-type: application/json")
+    fun get_users(
+            @Query("keyword") keyword : String,
+            @Query("count(*)") count : String,
+    ): Call<List<GetModel>>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
         private const val BASE_URL = "http://3.38.60.57:8001" // 주소

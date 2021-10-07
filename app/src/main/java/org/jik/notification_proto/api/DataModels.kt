@@ -20,3 +20,8 @@ data class InitialModel(
         var token: String? = null,
         var major: String? = null
 )
+
+data class GetModel(
+        var keyword: String? = null,
+        var count: String? = null
+)

@@ -34,6 +34,7 @@ import org.jik.notification_proto.MainActivity
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.KeywordAdapter
 import org.jik.notification_proto.api.APIS
+import org.jik.notification_proto.api.GetModel
 import org.jik.notification_proto.api.PostModel
 import org.jik.notification_proto.college.CollegeDatabase
 import org.jik.notification_proto.college.CollegeEntity
@@ -58,6 +59,27 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         savedInstanceState: Bundle?
     ): View? {
         val view =  inflater.inflate(R.layout.fragment_keyword, container, false)
+
+        var tmp : List<GetModel>? = null
+
+        APIS.create().get_users("tmp","123").enqueue(object : Callback<List<GetModel>> {
+            override fun onResponse(call: Call<List<GetModel>>, response: Response<List<GetModel>>) {
+                tmp = response.body()
+                Log.d("log", response.toString())
+                Log.d("log", response.body().toString())
+                view.findViewById<TextView>(R.id.popular_1).text =tmp!![0].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_2).text =tmp!![1].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_3).text =tmp!![2].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_4).text =tmp!![3].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_5).text =tmp!![4].keyword.toString()
+
+            }
+
+            override fun onFailure(call: Call<List<GetModel>>, t: Throwable) {
+                Log.d("log", t.printStackTrace().toString())
+                Log.d("log", "fail")
+            }
+        })
 
         // college db
         var collegedb = CollegeDatabase.getInstance(activity?.applicationContext!!)!!
