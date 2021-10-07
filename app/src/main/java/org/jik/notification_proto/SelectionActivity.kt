@@ -108,7 +108,6 @@ class SelectionActivity : AppCompatActivity() {
                     intent_home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent_home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    startActivity(intent_home)
 
                     // 학과 초기 선택 내용을 서버로 전달
                     Log.d("initialdata", initialdata.toString())
@@ -116,18 +115,20 @@ class SelectionActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<String>, response: Response<String>) {
                             Log.d("log", response.toString())
                             Log.d("log", response.body().toString())
+                            // 서버응답이 200 일 때(네트워크가 연결되었을 때, 서버가 켜져있을 때)
+                            startActivity(intent_home)
                         }
 
                         override fun onFailure(call: Call<String>, t: Throwable) {
                             Log.d("log", t.printStackTrace().toString())
                             Log.d("log", "fail")
+                            Toast.makeText(applicationContext,"네트워크 연결을 확인 해주세요! ",Toast.LENGTH_SHORT).show()
                         }
                     })
                 }
                 // home 액티비티에서 이 액티비티로 왔으면
                 else if (what == "home") {
                     // 이전의 화면으로 돌아가기
-                    finish()
 
                     // 학과 업데이트 내용을 서버로 전달
                     Log.d("updatedata", updatedata.toString())
@@ -135,11 +136,14 @@ class SelectionActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<String>, response: Response<String>) {
                             Log.d("log", response.toString())
                             Log.d("log", response.body().toString())
+                            // 서버응답이 200 일 때(네트워크가 연결되었을 때, 서버가 켜져있을 때)
+                            finish()
                         }
 
                         override fun onFailure(call: Call<String>, t: Throwable) {
                             Log.d("log", t.printStackTrace().toString())
                             Log.d("log", "fail")
+                            Toast.makeText(applicationContext,"네트워크 연결을 확인 해주세요! ",Toast.LENGTH_SHORT).show()
                         }
                     })
                 }

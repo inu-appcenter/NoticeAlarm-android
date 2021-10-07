@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.jik.notification_proto.HomeActivity
 import org.jik.notification_proto.MainActivity
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.KeywordAdapter
@@ -66,7 +68,7 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
              if (savedContacts.isNotEmpty()) {
                 enroll.addAll(savedContacts)
              }
-            Log.d("dsfsd", enroll[0].college)
+            Log.d("등록된 학과", enroll[0].college)
 
 
 
@@ -74,7 +76,7 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         keyworddb = KeywordDatabase.getInstance(activity?.applicationContext!!)!!
 
         activity?.runOnUiThread {
-            // LinearLayoutManager 에서  flexbox 로 바꿈 그런데 에러가 한번 뜸 지켜봐야 할 듯
+            // LinearLayoutManager 에서 flexbox 로 바꿈 그런데 에러가 한번 뜸 지켜봐야 할 듯
             view.findViewById<RecyclerView>(R.id.keyword_recyclerView).layoutManager = FlexboxLayoutManager(activity)
         }
         getAllKeywords()
@@ -82,9 +84,7 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         // 키워드 등록 버튼을 누르면 실행되어야하는 함수
         view.findViewById<AppCompatButton>(R.id.enroll_btn).setOnClickListener {
             val edittext = view.findViewById<EditText>(R.id.edit_keyword).text.toString()
-            view.findViewById<EditText>(R.id.edit_keyword).text.clear()
-            val keyword = KeywordEntity(null, edittext)
-            insertKeyword(keyword)
+
 
             // 키워드 등록 내용을 서버로 전달
             val token =this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
@@ -94,12 +94,18 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
             APIS.create().post_users(data).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     Log.d("log", response.toString())
-                    Log.d("log", response.body().toString())                }
+                    Log.d("log", response.body().toString())
+                    // 서버응답이 200 일 때(네트워크가 연결되었을 때, 서버가 켜져있을 때)
+                    view.findViewById<EditText>(R.id.edit_keyword).text.clear()
+                    val keyword = KeywordEntity(null, edittext)
+                    insertKeyword(keyword)
+                }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.d("log", t.printStackTrace().toString())
-                    Log.d("log", "fail")                }
-
+                    Log.d("log", "fail")
+                    Toast.makeText(activity!!.applicationContext,"네트워크 연결을 확인 해주세요! ", Toast.LENGTH_SHORT).show()
+                }
             })
         }
 

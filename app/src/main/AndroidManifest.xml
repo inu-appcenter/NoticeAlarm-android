@@ -12,16 +12,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notification_Proto"
         android:usesCleartextTraffic="true">
-        <activity android:name=".WebActivity"></activity>
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".NoticeActivity" />
-        <activity android:name=".SelectionActivity" />
+        <activity
+            android:name=".WebActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".DetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NoticeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SelectionActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -37,7 +44,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
