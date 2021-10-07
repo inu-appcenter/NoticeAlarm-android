@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.jik.notification_proto.R
 import org.jik.notification_proto.adapter.FragmentAdapter
 import org.jik.notification_proto.adapter.HomeAdapter
@@ -21,6 +23,7 @@ import org.jik.notification_proto.fragment.FragmentHome
 import org.jik.notification_proto.fragment.FragmentKeyword
 import org.jik.notification_proto.fragment.FragmentSelection
 import org.jik.notification_proto.keyword.KeywordDatabase
+import kotlin.concurrent.timer
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,15 @@ class HomeActivity : AppCompatActivity() {
         adapter.fragmentList = fragmentList
         viewPager.adapter = adapter
 
+
+//        val tabs = findViewById<TabLayout>(R.id.tabs)
+//
+//        TabLayoutMediator(tabs,viewPager){ tab, position ->
+//            when(position){
+//                0 -> tab.text = "홈"
+//                1 -> tab.text = "추가"
+//            }
+//        }.attach()
 
 
 
@@ -65,6 +77,11 @@ class HomeActivity : AppCompatActivity() {
                         // 각 keyword 의 명들을 가져와서 list 에 추가
                         for (i in keywords.indices) {
                             keywordlist.add(keywords[i].keyword)
+                        }
+                        if (keywordlist.size == 0){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"오른쪽으로 드래그하여 키워드를 추가해주세요!", Toast.LENGTH_SHORT).show()
+                            }
                         }
                         // 새로고침
                         val recyclerview = findViewById<RecyclerView>(R.id.home_recyclerview)

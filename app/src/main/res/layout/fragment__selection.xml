@@ -12,10 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="        인천대학교\n 학과 키워드 알림앱에\n  오신걸 환영합니다!"
+        android:text="인천대학교\n학과 키워드 알림앱에\n오신걸 환영합니다!"
         android:textColor="@color/gray"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
