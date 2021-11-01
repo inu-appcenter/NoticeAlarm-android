@@ -38,6 +38,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/keyword_edit"
         android:hint="키워드를 입력해주세요."
+        android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:padding="12dp"
         android:textSize="16sp"

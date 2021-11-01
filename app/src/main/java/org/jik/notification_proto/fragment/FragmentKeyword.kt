@@ -2,6 +2,7 @@ package org.jik.notification_proto.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -9,10 +10,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -141,6 +146,42 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         val addThread = Thread(r)
         addThread.start()
 
+        // EditText 의 키보드에서 등록을 하면 자동으로 내려가고 등록처리
+        val editText = view.findViewById<EditText>(R.id.edit_keyword)
+
+        editText.setOnEditorActionListener { textView, action, keyEvent ->
+            var handled = false
+            val edittext = view.findViewById<TextView>(R.id.edit_keyword).text.toString()
+
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+                handled = true
+                // 키워드 등록 내용을 서버로 전달
+                val token =this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+                Log.d("토큰 값: ",token.toString())
+                val data = PostModel(major = enroll[0].college,token = token, keyword = edittext)
+                Log.d("postdata",data.toString())
+                APIS.create().post_users(data).enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        Log.d("log", response.toString())
+                        Log.d("log", response.body().toString())
+                        // 서버응답이 200 일 때(네트워크가 연결되었을 때, 서버가 켜져있을 때)
+                        view.findViewById<EditText>(R.id.edit_keyword).text.clear()
+                        val keyword = KeywordEntity(null, edittext)
+                        insertKeyword(keyword)
+                    }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("log", t.printStackTrace().toString())
+                        Log.d("log", "fail")
+                        Toast.makeText(activity!!.applicationContext,"네트워크 연결을 확인 해주세요! ", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+            handled
+        }
 
         return view
     }
