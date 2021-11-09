@@ -65,19 +65,51 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
     ): View? {
         val view =  inflater.inflate(R.layout.fragment_keyword, container, false)
 
-        var tmp : List<GetModel>? = null
+        class PopListener(var txt: String): View.OnClickListener{
+            override fun onClick(p0: View?) {
+                // 키워드 등록 내용을 서버로 전달
+                val token =activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
+                Log.d("토큰 값: ",token.toString())
+                val data = PostModel(major = enroll[0].college,token = token, keyword = txt)
+                Log.d("postdata",data.toString())
+                APIS.create().post_users(data).enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        Log.d("log", response.toString())
+                        Log.d("log", response.body().toString())
+                        // 서버응답이 200 일 때(네트워크가 연결되었을 때, 서버가 켜져있을 때)
+                        view.findViewById<EditText>(R.id.edit_keyword).text.clear()
+                        val keyword = KeywordEntity(null, txt)
+                        insertKeyword(keyword)
+                    }
 
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("log", t.printStackTrace().toString())
+                        Log.d("log", "fail")
+                        Toast.makeText(activity!!.applicationContext,"네트워크 연결을 확인 해주세요! ", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+        }
+
+
+        var tmp : List<GetModel>? = null
+        // 인기 키워드
         APIS.create().get_users("tmp","123").enqueue(object : Callback<List<GetModel>> {
             override fun onResponse(call: Call<List<GetModel>>, response: Response<List<GetModel>>) {
                 tmp = response.body()
                 Log.d("log", response.toString())
                 Log.d("log", response.body().toString())
                 view.findViewById<TextView>(R.id.popular_1).text =tmp!![0].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_1).setOnClickListener(PopListener(tmp!![0].keyword.toString()))
                 view.findViewById<TextView>(R.id.popular_2).text =tmp!![1].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_2).setOnClickListener(PopListener(tmp!![1].keyword.toString()))
                 view.findViewById<TextView>(R.id.popular_3).text =tmp!![2].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_3).setOnClickListener(PopListener(tmp!![2].keyword.toString()))
                 view.findViewById<TextView>(R.id.popular_4).text =tmp!![3].keyword.toString()
+                view.findViewById<TextView>(R.id.popular_4).setOnClickListener(PopListener(tmp!![3].keyword.toString()))
                 view.findViewById<TextView>(R.id.popular_5).text =tmp!![4].keyword.toString()
-
+                view.findViewById<TextView>(R.id.popular_5).setOnClickListener(PopListener(tmp!![3].keyword.toString()))
             }
 
             override fun onFailure(call: Call<List<GetModel>>, t: Throwable) {
@@ -86,6 +118,8 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
             }
         })
 
+
+        
         // college db
         var collegedb = CollegeDatabase.getInstance(activity?.applicationContext!!)!!
 
