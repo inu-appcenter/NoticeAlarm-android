@@ -109,7 +109,7 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
                 view.findViewById<TextView>(R.id.popular_4).text =tmp!![3].keyword.toString()
                 view.findViewById<TextView>(R.id.popular_4).setOnClickListener(PopListener(tmp!![3].keyword.toString()))
                 view.findViewById<TextView>(R.id.popular_5).text =tmp!![4].keyword.toString()
-                view.findViewById<TextView>(R.id.popular_5).setOnClickListener(PopListener(tmp!![3].keyword.toString()))
+                view.findViewById<TextView>(R.id.popular_5).setOnClickListener(PopListener(tmp!![4].keyword.toString()))
             }
 
             override fun onFailure(call: Call<List<GetModel>>, t: Throwable) {
