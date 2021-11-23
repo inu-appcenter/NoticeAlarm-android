@@ -146,6 +146,10 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         view.findViewById<AppCompatButton>(R.id.enroll_btn).setOnClickListener {
             val edittext = view.findViewById<EditText>(R.id.edit_keyword).text.toString()
 
+            if (edittext.isBlank()) {
+                Toast.makeText(it.context, "키워드를 입력해주세요 :)", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             // 키워드 등록 내용을 서버로 전달
             val token =this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)?.getString("token","default value")
@@ -186,6 +190,11 @@ class FragmentKeyword : Fragment() , OnDeleteListener{
         editText.setOnEditorActionListener { textView, action, keyEvent ->
             var handled = false
             val edittext = view.findViewById<TextView>(R.id.edit_keyword).text.toString()
+
+            if (edittext.isBlank()) {
+                Toast.makeText(textView.context, "키워드를 입력해주세요 :)", Toast.LENGTH_SHORT).show()
+                return@setOnEditorActionListener true
+            }
 
             if (action == EditorInfo.IME_ACTION_DONE) {
                 val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
