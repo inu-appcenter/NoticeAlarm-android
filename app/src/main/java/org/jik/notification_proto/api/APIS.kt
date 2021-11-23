@@ -46,7 +46,7 @@ interface APIS {
     ): Call<List<GetModel>>
 
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
-        private const val BASE_URL = "http://3.38.60.57:8001" // 주소
+        private const val BASE_URL = "http://52.78.26.17:8001" // 주소
 
         fun create(): APIS {
 
